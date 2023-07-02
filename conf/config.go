@@ -4,20 +4,24 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
 	"github.com/lampnick/doctron/pkg/alioss"
 )
 
 const (
 	DoctronUploaderAliOss = "alioss"
+	DoctronUploaderLocal  = "localStore"
 	DoctronUploaderMock   = "mockUploader"
 )
 
 var LoadedConfig *Config
 var OssConfig alioss.OssConfig
+var LocalStoreConfig LocalStore
 
 type Config struct {
-	Doctron Doctron
-	Oss     Oss
+	Doctron    Doctron
+	Oss        Oss
+	LocalStore LocalStore
 }
 
 type Doctron struct {
@@ -44,6 +48,10 @@ type Oss struct {
 	AccessKeySecret     string
 	BucketName          string
 	PrivateServerDomain string
+}
+
+type LocalStore struct {
+	Dir string
 }
 
 const defaultMaxConvertWorker = 50

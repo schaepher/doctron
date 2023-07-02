@@ -11,6 +11,9 @@ func NewDoctronUploader(ctx context.Context, doctronType string, uc UploadConfig
 	case conf.DoctronUploaderAliOss:
 		fac := &(aliossFactory{})
 		return fac.createDoctronUploader(ctx, uc)
+	case conf.DoctronUploaderLocal:
+		fac := &(localFactory{})
+		return fac.createDoctronUploader(ctx, uc)
 	case conf.DoctronUploaderMock:
 		fac := &(mockFactory{})
 		return fac.createDoctronUploader(ctx, uc)
@@ -28,6 +31,18 @@ type aliossFactory struct {
 
 func (ins *aliossFactory) createDoctronUploader(ctx context.Context, uc UploadConfig) DoctronUploaderI {
 	return &AliOssUploader{
+		DoctronUploader: DoctronUploader{
+			ctx:          ctx,
+			UploadConfig: uc,
+		},
+	}
+}
+
+type localFactory struct {
+}
+
+func (ins *localFactory) createDoctronUploader(ctx context.Context, uc UploadConfig) DoctronUploaderI {
+	return &LocalUploader{
 		DoctronUploader: DoctronUploader{
 			ctx:          ctx,
 			UploadConfig: uc,

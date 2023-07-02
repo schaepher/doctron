@@ -105,6 +105,10 @@ func initConfig() {
 		if err != nil {
 			log.Fatalf("[read config UnmarshalKey oss] err: %v", err)
 		}
+		err = viper.UnmarshalKey("localStore", &conf.LoadedConfig.LocalStore)
+		if err != nil {
+			log.Fatalf("[read config UnmarshalKey localStore] err: %v", err)
+		}
 	} else {
 		log.Fatalf("[read config ReadInConfig] err: %v", err)
 	}
@@ -118,4 +122,6 @@ func initOssConfig(config *conf.Config) {
 	conf.OssConfig.AccessKeySecret = config.Oss.AccessKeySecret
 	conf.OssConfig.BucketName = config.Oss.BucketName
 	conf.OssConfig.PrivateServerDomain = config.Oss.PrivateServerDomain
+
+	conf.LocalStoreConfig.Dir = config.LocalStore.Dir
 }

@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/gorilla/schema"
@@ -49,15 +48,14 @@ func Html2PdfHandler(ctx iris.Context) {
 		return
 	}
 
-	if errors.Is(doctronOutput.Err, worker.ErrNoNeedToUpload) {
-		ctx.Header(irisContext.ContentTypeHeaderKey, "application/pdf")
-		_, err = ctx.Write(doctronOutput.Buf)
-		if err != nil {
-			outputDTO.Code = common.ConvertPdfFailed
-			_, _ = common.NewJsonOutput(ctx, outputDTO)
-			return
-		}
+	ctx.Header(irisContext.ContentTypeHeaderKey, "application/pdf")
+	_, err = ctx.Write(doctronOutput.Buf)
+	if err != nil {
+		outputDTO.Code = common.ConvertPdfFailed
+		_, _ = common.NewJsonOutput(ctx, outputDTO)
+		return
 	}
+
 	if doctronOutput.Err != nil {
 		outputDTO.Code = common.ConvertPdfFailed
 		outputDTO.Message = doctronOutput.Err.Error()
